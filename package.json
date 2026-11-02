@@ -1,0 +1,110 @@
+{
+  "name": "ripplemap",
+  "displayName": "RippleMap",
+  "description": "Local dependency maps and change-impact analysis for Python, C++, JavaScript and TypeScript projects.",
+  "version": "1.1.0",
+  "publisher": "local-demo",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "dependencies",
+    "dependency-graph",
+    "python",
+    "cpp",
+    "c++",
+    "typescript",
+    "javascript",
+    "impact-analysis"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onCommand:ripplemap.analyzeWorkspace",
+    "onCommand:ripplemap.analyzeCurrentFile",
+    "onCommand:ripplemap.refresh",
+    "onCommand:ripplemap.analyzeFileImpact"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "ripplemap.analyzeWorkspace",
+        "title": "RippleMap: Analyze Workspace Dependencies",
+        "category": "RippleMap"
+      },
+      {
+        "command": "ripplemap.analyzeCurrentFile",
+        "title": "RippleMap: Analyze Current File Impact",
+        "category": "RippleMap"
+      },
+      {
+        "command": "ripplemap.refresh",
+        "title": "RippleMap: Refresh Dependency Map",
+        "category": "RippleMap"
+      },
+      {
+        "command": "ripplemap.analyzeFileImpact",
+        "title": "RippleMap: Analyze File Impact",
+        "category": "RippleMap"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "ripplemap.analyzeFileImpact",
+          "when": "resourceExtname =~ /\\.(py|pyw|js|jsx|mjs|cjs|ts|tsx|mts|cts|cpp|cc|cxx|c|h|hh|hpp|hxx|ipp|tpp)$/",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "ripplemap.analyzeCurrentFile",
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == typescript || resourceLangId == cpp || resourceLangId == c",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "RippleMap",
+      "properties": {
+        "ripplemap.maxFiles": {
+          "type": "number",
+          "default": 10000,
+          "minimum": 100,
+          "maximum": 50000,
+          "description": "Maximum number of source files to scan in each workspace folder."
+        },
+        "ripplemap.cppIncludeDirectories": {
+          "type": "array",
+          "default": [
+            "include",
+            "src"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional workspace-relative include directories for C++ header resolution."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "npm run check-types && node esbuild.js --production",
+    "check-types": "tsc --noEmit",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.24.0"
+  }
+}
